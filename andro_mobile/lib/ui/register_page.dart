@@ -70,7 +70,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: const Text('Account created! sign in to Enter Andro galaxy.'),
+        content: const Text('Account created! Sign in to Enter Andro Galaxy.'),
         backgroundColor: _isDark
             ? AndroColors.darkAccent
             : AndroColors.lightAccent,
@@ -151,7 +151,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     const SizedBox(height: 6),
                     _buildTextField(
                       controller: _nameController,
-                      hint: 'first last names',
+                      hint: 'Input your full name',
                       icon: Icons.person_outline,
                       bg: bg,
                       text: text,

@@ -52,7 +52,7 @@ class EventDetailScreen extends ConsumerWidget {
                       context.push('/event/$eventId/attendance'),
                   child: const Text('Manage',
                       style: TextStyle(
-                          color: AppColors.gold, fontWeight: FontWeight.w600)),
+                          color: AppColors.accent, fontWeight: FontWeight.w600)),
                 ),
             ],
             flexibleSpace: FlexibleSpaceBar(
@@ -87,8 +87,8 @@ class EventDetailScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(children: [
-                    _chip(_typeLabel(event.type), AppColors.gold,
-                        AppColors.goldMuted),
+                    _chip(_typeLabel(event.type), AppColors.accent,
+                        AppColors.accentMuted),
                     if (event.status == EventStatus.past) ...[
                       const SizedBox(width: 6),
                       _chip('Past', AppColors.textSecondary,
@@ -158,7 +158,7 @@ class EventDetailScreen extends ConsumerWidget {
         children: [
           _stat('${event.goingIds.length}', 'Going', AppColors.success),
           const SizedBox(width: 24),
-          _stat('${event.interestedIds.length}', 'Interested', AppColors.gold),
+          _stat('${event.interestedIds.length}', 'Interested', AppColors.accent),
           if (event.totalInterest > 0) ...[
             const SizedBox(width: 24),
             _stat('${event.totalInterest}', 'Total', AppColors.textSecondary),
@@ -247,7 +247,7 @@ class EventDetailScreen extends ConsumerWidget {
       case EventType.social:
         return const Color(0xFF7B68EE);
       default:
-        return AppColors.gold;
+        return AppColors.accent;
     }
   }
 }
@@ -278,10 +278,10 @@ class _RsvpFooter extends ConsumerWidget {
               style: OutlinedButton.styleFrom(
                 side: BorderSide(
                     color: currentStatus == RsvpStatus.interested
-                        ? AppColors.gold
+                        ? AppColors.accent
                         : AppColors.border),
                 backgroundColor: currentStatus == RsvpStatus.interested
-                    ? AppColors.goldMuted
+                    ? AppColors.accentMuted
                     : Colors.transparent,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
@@ -293,7 +293,7 @@ class _RsvpFooter extends ConsumerWidget {
                     : '☆ Interested',
                 style: TextStyle(
                     color: currentStatus == RsvpStatus.interested
-                        ? AppColors.gold
+                        ? AppColors.accent
                         : AppColors.textSecondary,
                     fontWeight: FontWeight.w500),
               ),
@@ -308,7 +308,7 @@ class _RsvpFooter extends ConsumerWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: currentStatus == RsvpStatus.going
                     ? AppColors.success
-                    : AppColors.gold,
+                    : AppColors.accent,
                 foregroundColor: AppColors.bgPrimary,
                 elevation: 0,
                 shape: RoundedRectangleBorder(

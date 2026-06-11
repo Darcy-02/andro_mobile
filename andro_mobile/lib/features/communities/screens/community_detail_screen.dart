@@ -56,12 +56,12 @@ class _CommunityDetailScreenState
             ),
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
-                color: AppColors.goldMuted,
+                color: AppColors.accentMuted,
                 child: Center(
                   child: Text(
                     community.name[0],
                     style: const TextStyle(
-                        color: AppColors.gold,
+                        color: AppColors.accent,
                         fontSize: 64,
                         fontWeight: FontWeight.w700),
                   ),
@@ -107,15 +107,15 @@ class _CommunityDetailScreenState
                               horizontal: 16, vertical: 8),
                           decoration: BoxDecoration(
                             color: isMember
-                                ? AppColors.goldMuted
-                                : AppColors.gold,
+                                ? AppColors.accentMuted
+                                : AppColors.accent,
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
                             isMember ? 'Joined ✓' : 'Join',
                             style: TextStyle(
                                 color: isMember
-                                    ? AppColors.gold
+                                    ? AppColors.accent
                                     : AppColors.bgPrimary,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600),
@@ -127,9 +127,9 @@ class _CommunityDetailScreenState
                   const SizedBox(height: 16),
                   TabBar(
                     controller: _tab,
-                    labelColor: AppColors.gold,
+                    labelColor: AppColors.accent,
                     unselectedLabelColor: AppColors.textSecondary,
-                    indicatorColor: AppColors.gold,
+                    indicatorColor: AppColors.accent,
                     indicatorSize: TabBarIndicatorSize.label,
                     dividerColor: AppColors.border,
                     tabs: const [
@@ -216,10 +216,10 @@ class _MembersTab extends StatelessWidget {
               const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           leading: CircleAvatar(
             radius: 20,
-            backgroundColor: AppColors.goldMuted,
+            backgroundColor: AppColors.accentMuted,
             child: Text(u.fullName[0],
                 style: const TextStyle(
-                    color: AppColors.gold, fontWeight: FontWeight.w600)),
+                    color: AppColors.accent, fontWeight: FontWeight.w600)),
           ),
           title: Text(u.fullName,
               style: const TextStyle(

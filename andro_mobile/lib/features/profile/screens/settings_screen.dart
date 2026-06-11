@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
 import '../providers/settings_provider.dart';
+import '../../auth/providers/auth_provider.dart';
 import 'edit_profile_screen.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -31,7 +32,7 @@ class SettingsScreen extends ConsumerWidget {
       ),
       body: settingsAsync.when(
         loading: () =>
-            const Center(child: CircularProgressIndicator(color: AppColors.gold)),
+            const Center(child: CircularProgressIndicator(color: AppColors.accent)),
         error: (e, _) => Center(
             child: Text('Error: $e',
                 style: const TextStyle(color: AppColors.danger))),
@@ -164,7 +165,7 @@ class SettingsScreen extends ConsumerWidget {
       title: Text(title,
           style: const TextStyle(color: AppColors.textPrimary, fontSize: 14)),
       value: value,
-      activeThumbColor: AppColors.gold,
+      activeThumbColor: AppColors.accent,
       onChanged: onChanged,
     );
   }
@@ -200,10 +201,7 @@ class SettingsScreen extends ConsumerWidget {
         confirmLabel: 'Log Out',
         onConfirm: () async {
           await ref.read(settingsProvider.notifier).clearAll();
-          if (context.mounted) {
-            Navigator.of(context)
-                .popUntil((route) => route.isFirst);
-          }
+          ref.read(authProvider.notifier).logout();
         },
       ),
     );
@@ -219,10 +217,7 @@ class SettingsScreen extends ConsumerWidget {
         destructive: true,
         onConfirm: () async {
           await ref.read(settingsProvider.notifier).clearAll();
-          if (context.mounted) {
-            Navigator.of(context)
-                .popUntil((route) => route.isFirst);
-          }
+          ref.read(authProvider.notifier).logout();
         },
       ),
     );
@@ -268,7 +263,7 @@ class _ConfirmDialog extends StatelessWidget {
           child: Text(
             confirmLabel,
             style: TextStyle(
-                color: destructive ? AppColors.danger : AppColors.gold,
+                color: destructive ? AppColors.danger : AppColors.accent,
                 fontWeight: FontWeight.w600),
           ),
         ),

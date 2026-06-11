@@ -79,7 +79,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 borderSide: const BorderSide(color: AppColors.border)),
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: const BorderSide(color: AppColors.gold)),
+                borderSide: const BorderSide(color: AppColors.accent)),
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           ),
@@ -198,10 +198,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                 leading: CircleAvatar(
                   radius: 20,
-                  backgroundColor: AppColors.goldMuted,
+                  backgroundColor: AppColors.accentMuted,
                   child: Text(u.fullName[0],
                       style: const TextStyle(
-                          color: AppColors.gold,
+                          color: AppColors.accent,
                           fontWeight: FontWeight.w600)),
                 ),
                 title: Text(u.fullName,
@@ -245,10 +245,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: AppColors.goldMuted,
+                color: AppColors.accentMuted,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Icon(icon, color: AppColors.gold, size: 20),
+              child: Icon(icon, color: AppColors.accent, size: 20),
             ),
             const SizedBox(width: 14),
             Expanded(
@@ -291,13 +291,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: AppColors.goldMuted,
+                color: AppColors.accentMuted,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Center(
                 child: Text(c.name[0],
                     style: const TextStyle(
-                        color: AppColors.gold,
+                        color: AppColors.accent,
                         fontSize: 16,
                         fontWeight: FontWeight.w700)),
               ),

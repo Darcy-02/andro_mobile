@@ -13,8 +13,10 @@ class OnboardingScreen extends ConsumerStatefulWidget {
   ConsumerState<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
-class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
+class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
+    with TickerProviderStateMixin {
   int _step = 0;
+  bool _forward = true;
 
   // Step 0 fields
   final _nameCtrl = TextEditingController(text: 'Ayomide Adeleye');
@@ -38,6 +40,24 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   static const _years = [2024, 2025, 2026, 2027, 2028];
 
+  static const _tagIcons = <String, IconData>{
+    'Entrepreneurship': Icons.rocket_launch_outlined,
+    'Technology': Icons.computer_outlined,
+    'Leadership': Icons.stars_outlined,
+    'Arts & Culture': Icons.palette_outlined,
+    'Sports': Icons.sports_soccer_outlined,
+    'Community Service': Icons.volunteer_activism_outlined,
+    'Academic Research': Icons.science_outlined,
+    'Career & Internships': Icons.work_outline,
+  };
+
+  static const _stepMeta = [
+    (icon: Icons.person_outline, label: 'Profile'),
+    (icon: Icons.location_on_outlined, label: 'Campus'),
+    (icon: Icons.interests_outlined, label: 'Interests'),
+    (icon: Icons.badge_outlined, label: 'Role'),
+  ];
+
   @override
   void dispose() {
     _nameCtrl.dispose();
@@ -47,7 +67,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   void _next() {
     if (_step < 3) {
-      setState(() => _step++);
+      setState(() {
+        _forward = true;
+        _step++;
+      });
     } else {
       ref.read(currentUserProvider.notifier).update(
             ref.read(currentUserProvider).copyWith(
@@ -63,70 +86,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.bgPrimary,
-      appBar: AppBar(
-        backgroundColor: AppColors.bgPrimary,
-        surfaceTintColor: Colors.transparent,
-        leading: _step > 0
-            ? IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new,
-                    color: AppColors.textPrimary, size: 18),
-                onPressed: () => setState(() => _step--),
-              )
-            : null,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(4),
-          child: LinearProgressIndicator(
-            value: (_step + 1) / 4,
-            backgroundColor: AppColors.bgElevated,
-            valueColor:
-                const AlwaysStoppedAnimation<Color>(AppColors.gold),
-            minHeight: 3,
-          ),
-        ),
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 24),
-              Text('Step ${_step + 1} of 4',
-                  style: const TextStyle(
-                      color: AppColors.textSecondary, fontSize: 12)),
-              const SizedBox(height: 8),
-              Expanded(child: _body()),
-              const SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: _canProceed ? _next : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.gold,
-                    disabledBackgroundColor:
-                        AppColors.gold.withValues(alpha: 0.4),
-                    foregroundColor: AppColors.bgPrimary,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                  ),
-                  child: Text(_step == 3 ? 'Get Started' : 'Continue',
-                      style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.w600)),
-                ),
-              ),
-              const SizedBox(height: 24),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  void _back() => setState(() {
+        _forward = false;
+        _step--;
+      });
 
   bool get _canProceed {
     if (_step == 0) return _nameCtrl.text.trim().isNotEmpty;
@@ -134,7 +97,159 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     return true;
   }
 
-  Widget _body() {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.bgPrimary,
+      body: SafeArea(
+        child: Column(
+          children: [
+            _topBar(),
+            Expanded(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 320),
+                switchInCurve: Curves.easeOutCubic,
+                switchOutCurve: Curves.easeInCubic,
+                transitionBuilder: (child, anim) {
+                  final offset = _forward
+                      ? Tween(begin: const Offset(0.12, 0), end: Offset.zero)
+                      : Tween(begin: const Offset(-0.12, 0), end: Offset.zero);
+                  return FadeTransition(
+                    opacity: anim,
+                    child: SlideTransition(
+                      position: offset.animate(anim),
+                      child: child,
+                    ),
+                  );
+                },
+                child: KeyedSubtree(
+                  key: ValueKey(_step),
+                  child: _stepBody(),
+                ),
+              ),
+            ),
+            _footer(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _topBar() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+      child: Row(
+        children: [
+          // Back or placeholder
+          SizedBox(
+            width: 36,
+            height: 36,
+            child: _step > 0
+                ? GestureDetector(
+                    onTap: _back,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.bgSurface,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: AppColors.border),
+                      ),
+                      child: const Icon(
+                        Icons.arrow_back_ios_new,
+                        color: AppColors.textPrimary,
+                        size: 14,
+                      ),
+                    ),
+                  )
+                : null,
+          ),
+          const Spacer(),
+          // Dot step indicators
+          Row(
+            children: List.generate(4, (i) {
+              final active = i == _step;
+              final done = i < _step;
+              return AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeOutCubic,
+                margin: const EdgeInsets.only(left: 6),
+                width: active ? 24 : 8,
+                height: 8,
+                decoration: BoxDecoration(
+                  color: done
+                      ? AppColors.accent.withValues(alpha: 0.5)
+                      : active
+                          ? AppColors.accent
+                          : AppColors.bgElevated,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              );
+            }),
+          ),
+          const Spacer(),
+          // Step count label (mirrors back button width)
+          SizedBox(
+            width: 36,
+            child: Text(
+              '${_step + 1}/4',
+              style: const TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500),
+              textAlign: TextAlign.right,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _footer() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 12, 24, 28),
+      child: Column(
+        children: [
+          SizedBox(
+            width: double.infinity,
+            height: 52,
+            child: GestureDetector(
+              onTap: _canProceed ? _next : null,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                decoration: BoxDecoration(
+                  color: _canProceed ? AppColors.accent : AppColors.bgElevated,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: _canProceed
+                      ? [
+                          BoxShadow(
+                            color: AppColors.accent.withValues(alpha: 0.3),
+                            blurRadius: 16,
+                            offset: const Offset(0, 4),
+                          ),
+                        ]
+                      : null,
+                ),
+                child: Center(
+                  child: Text(
+                    _step == 3 ? 'Get Started →' : 'Continue →',
+                    style: TextStyle(
+                      color: _canProceed
+                          ? AppColors.bgPrimary
+                          : AppColors.textSecondary,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.3,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _stepBody() {
     switch (_step) {
       case 0:
         return _step0();
@@ -147,187 +262,317 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     }
   }
 
+  // ── Step 0: Profile ──────────────────────────────────────────────
+
   Widget _step0() {
     return ListView(
+      padding: const EdgeInsets.fromLTRB(24, 28, 24, 0),
       children: [
-        const Text('Tell us about yourself',
-            style: TextStyle(
-                color: AppColors.textPrimary,
-                fontSize: 22,
-                fontWeight: FontWeight.w600)),
-        const SizedBox(height: 24),
-        _label('Full name'),
+        _stepIconHeader(_stepMeta[0].icon),
+        const SizedBox(height: 20),
+        const Text(
+          'Tell us about\nyourself',
+          style: TextStyle(
+            color: AppColors.textPrimary,
+            fontSize: 26,
+            fontWeight: FontWeight.w700,
+            height: 1.2,
+          ),
+        ),
         const SizedBox(height: 6),
-        _textField(_nameCtrl, 'e.g. Ayomide Adeleye'),
+        const Text(
+          'This shows up on your campus profile.',
+          style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+        ),
+        const SizedBox(height: 28),
+        _fieldLabel('Full name'),
+        _textField(_nameCtrl, 'Your full name'),
         const SizedBox(height: 16),
-        _label('Preferred name'),
-        const SizedBox(height: 6),
+        _fieldLabel('Preferred name'),
         _textField(_preferredCtrl, 'What should we call you?'),
         const SizedBox(height: 16),
-        _label('Programme'),
-        const SizedBox(height: 6),
+        _fieldLabel('Programme'),
         _dropdown(
           value: _programme,
           items: _programmes,
           onChanged: (v) => setState(() => _programme = v!),
         ),
         const SizedBox(height: 16),
-        _label('Graduation year'),
-        const SizedBox(height: 6),
+        _fieldLabel('Graduation year'),
         _dropdown(
           value: _gradYear,
           items: _years,
           onChanged: (v) => setState(() => _gradYear = v!),
         ),
+        const SizedBox(height: 8),
       ],
     );
   }
+
+  // ── Step 1: Campus ───────────────────────────────────────────────
 
   Widget _step1() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('Your campus',
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 28, 24, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _stepIconHeader(_stepMeta[1].icon),
+          const SizedBox(height: 20),
+          const Text(
+            'Your campus',
             style: TextStyle(
-                color: AppColors.textPrimary,
-                fontSize: 22,
-                fontWeight: FontWeight.w600)),
-        const SizedBox(height: 8),
-        const Text('ANDRO is for ALU Kigali students only.',
-            style:
-                TextStyle(color: AppColors.textSecondary, fontSize: 14)),
-        const SizedBox(height: 32),
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: AppColors.bgSurface,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.gold.withValues(alpha: 0.4)),
+              color: AppColors.textPrimary,
+              fontSize: 26,
+              fontWeight: FontWeight.w700,
+            ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.goldMuted,
-                  borderRadius: BorderRadius.circular(20),
+          const SizedBox(height: 6),
+          const Text(
+            'ANDRO is exclusively for ALU Kigali students.',
+            style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+          ),
+          const SizedBox(height: 32),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: AppColors.bgSurface,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                  color: AppColors.accent.withValues(alpha: 0.35), width: 1.5),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.accent.withValues(alpha: 0.06),
+                  blurRadius: 20,
+                  offset: const Offset(0, 6),
                 ),
-                child: const Text('YOUR CAMPUS',
-                    style: TextStyle(
-                        color: AppColors.gold,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 0.8)),
-              ),
-              const SizedBox(height: 12),
-              const Text('ALU Kigali',
-                  style: TextStyle(
-                      color: AppColors.textPrimary,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600)),
-              const SizedBox(height: 4),
-              const Text('Kigali, Rwanda',
-                  style: TextStyle(
-                      color: AppColors.textSecondary, fontSize: 14)),
-            ],
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const Text('🇷🇼', style: TextStyle(fontSize: 28)),
+                    const SizedBox(width: 14),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 9, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: AppColors.accentMuted,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: const Text(
+                            'YOUR CAMPUS',
+                            style: TextStyle(
+                              color: AppColors.accent,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        const Text(
+                          'ALU Kigali',
+                          style: TextStyle(
+                            color: AppColors.textPrimary,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                const Divider(color: AppColors.border, height: 1),
+                const SizedBox(height: 16),
+                _campusDetail(Icons.location_on_outlined, 'Kigali, Rwanda'),
+                const SizedBox(height: 10),
+                _campusDetail(
+                    Icons.groups_outlined, 'African Leadership University'),
+                const SizedBox(height: 10),
+                _campusDetail(Icons.verified_outlined, 'Verified institution'),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
+
+  Widget _campusDetail(IconData icon, String text) => Row(
+        children: [
+          Icon(icon, color: AppColors.accent, size: 16),
+          const SizedBox(width: 10),
+          Text(text,
+              style: const TextStyle(
+                  color: AppColors.textSecondary, fontSize: 13)),
+        ],
+      );
+
+  // ── Step 2: Interests ────────────────────────────────────────────
 
   Widget _step2() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('Your interests',
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 28, 24, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _stepIconHeader(_stepMeta[2].icon),
+          const SizedBox(height: 20),
+          const Text(
+            'Your interests',
             style: TextStyle(
-                color: AppColors.textPrimary,
-                fontSize: 22,
-                fontWeight: FontWeight.w600)),
-        const SizedBox(height: 8),
-        const Text('Pick at least one. We use this to personalise your feed.',
-            style:
-                TextStyle(color: AppColors.textSecondary, fontSize: 14)),
-        const SizedBox(height: 24),
-        Expanded(
-          child: Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children: interestTagOptions.map((tag) {
-              final selected = _selectedTags.contains(tag);
-              return GestureDetector(
-                onTap: () => setState(() {
-                  selected
-                      ? _selectedTags.remove(tag)
-                      : _selectedTags.add(tag);
-                }),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 14, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: selected ? AppColors.goldMuted : AppColors.bgSurface,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: selected ? AppColors.gold : AppColors.border,
-                    ),
-                  ),
-                  child: Text(tag,
-                      style: TextStyle(
-                          color: selected
-                              ? AppColors.gold
-                              : AppColors.textSecondary,
-                          fontSize: 13,
-                          fontWeight: selected
-                              ? FontWeight.w500
-                              : FontWeight.w400)),
-                ),
-              );
-            }).toList(),
+              color: AppColors.textPrimary,
+              fontSize: 26,
+              fontWeight: FontWeight.w700,
+            ),
           ),
-        ),
-      ],
+          const SizedBox(height: 6),
+          Text(
+            _selectedTags.isEmpty
+                ? 'Pick at least one to personalise your feed.'
+                : '${_selectedTags.length} selected',
+            style: TextStyle(
+              color: _selectedTags.isEmpty
+                  ? AppColors.textSecondary
+                  : AppColors.accent,
+              fontSize: 14,
+            ),
+          ),
+          const SizedBox(height: 24),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children: interestTagOptions.map((tag) {
+                  final selected = _selectedTags.contains(tag);
+                  final icon = _tagIcons[tag] ?? Icons.tag;
+                  return GestureDetector(
+                    onTap: () => setState(() {
+                      selected
+                          ? _selectedTags.remove(tag)
+                          : _selectedTags.add(tag);
+                    }),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 180),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: selected
+                            ? AppColors.accentMuted
+                            : AppColors.bgSurface,
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(
+                          color: selected ? AppColors.accent : AppColors.border,
+                          width: selected ? 1.5 : 1,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            icon,
+                            size: 15,
+                            color: selected
+                                ? AppColors.accent
+                                : AppColors.textSecondary,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            tag,
+                            style: TextStyle(
+                              color: selected
+                                  ? AppColors.accent
+                                  : AppColors.textSecondary,
+                              fontSize: 13,
+                              fontWeight: selected
+                                  ? FontWeight.w600
+                                  : FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
+  // ── Step 3: Role ─────────────────────────────────────────────────
+
   Widget _step3() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('Your role',
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 28, 24, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _stepIconHeader(_stepMeta[3].icon),
+          const SizedBox(height: 20),
+          const Text(
+            'Your role',
             style: TextStyle(
-                color: AppColors.textPrimary,
-                fontSize: 22,
-                fontWeight: FontWeight.w600)),
-        const SizedBox(height: 8),
-        const Text('This shapes what you can post and organise.',
-            style:
-                TextStyle(color: AppColors.textSecondary, fontSize: 14)),
-        const SizedBox(height: 24),
-        _roleCard(
-          UserRole.student,
-          'Student',
-          'Attend events, join communities, connect with peers',
-          Icons.school_outlined,
-        ),
-        const SizedBox(height: 10),
-        _roleCard(
-          UserRole.clubLeader,
-          'Club Leader',
-          'All of the above, plus manage your club and post events',
-          Icons.groups_outlined,
-        ),
-        const SizedBox(height: 10),
-        _roleCard(
-          UserRole.organiser,
-          'Organiser',
-          'Create and manage campus-wide events and opportunities',
-          Icons.event_outlined,
-        ),
-      ],
+              color: AppColors.textPrimary,
+              fontSize: 26,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 6),
+          const Text(
+            'This shapes what you can post and organise.\nYou can change it later.',
+            style: TextStyle(
+                color: AppColors.textSecondary, fontSize: 14, height: 1.5),
+          ),
+          const SizedBox(height: 24),
+          _roleCard(
+            UserRole.student,
+            'Student',
+            'Attend events, join communities, connect with peers',
+            Icons.school_outlined,
+          ),
+          const SizedBox(height: 10),
+          _roleCard(
+            UserRole.clubLeader,
+            'Club Leader',
+            'Manage your club and post events for members',
+            Icons.groups_outlined,
+          ),
+          const SizedBox(height: 10),
+          _roleCard(
+            UserRole.organiser,
+            'Organiser',
+            'Create campus-wide events and post opportunities',
+            Icons.event_note_outlined,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── Shared components ────────────────────────────────────────────
+
+  Widget _stepIconHeader(IconData icon) {
+    return Container(
+      width: 48,
+      height: 48,
+      decoration: BoxDecoration(
+        color: AppColors.accentMuted,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.accent.withValues(alpha: 0.4)),
+      ),
+      child: Icon(icon, color: AppColors.accent, size: 22),
     );
   }
 
@@ -335,73 +580,131 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     final selected = _role == role;
     return GestureDetector(
       onTap: () => setState(() => _role = role),
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: selected ? AppColors.goldMuted : AppColors.bgSurface,
+          color: selected ? AppColors.accentMuted : AppColors.bgSurface,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-              color: selected ? AppColors.gold : AppColors.border),
+            color: selected ? AppColors.accent : AppColors.border,
+            width: selected ? 1.5 : 1,
+          ),
         ),
         child: Row(
           children: [
             Container(
-              width: 40,
-              height: 40,
+              width: 42,
+              height: 42,
               decoration: BoxDecoration(
-                color: selected ? AppColors.gold : AppColors.bgElevated,
+                color: selected ? AppColors.accent : AppColors.bgElevated,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Icon(icon,
-                  color: selected ? AppColors.bgPrimary : AppColors.textSecondary,
-                  size: 20),
+              child: Icon(
+                icon,
+                color: selected ? AppColors.bgPrimary : AppColors.textSecondary,
+                size: 20,
+              ),
             ),
             const SizedBox(width: 14),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title,
-                      style: TextStyle(
-                          color: selected
-                              ? AppColors.gold
-                              : AppColors.textPrimary,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600)),
+                  Text(
+                    title,
+                    style: TextStyle(
+                      color: selected ? AppColors.accent : AppColors.textPrimary,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                   const SizedBox(height: 2),
-                  Text(subtitle,
-                      style: const TextStyle(
-                          color: AppColors.textSecondary, fontSize: 12)),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                        color: AppColors.textSecondary, fontSize: 12, height: 1.4),
+                  ),
                 ],
               ),
             ),
-            if (selected)
-              const Icon(Icons.check_circle,
-                  color: AppColors.gold, size: 20),
+            const SizedBox(width: 8),
+            AnimatedOpacity(
+              opacity: selected ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 180),
+              child: const Icon(
+                Icons.check_circle,
+                color: AppColors.accent,
+                size: 20,
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _label(String text) => Text(text,
-      style: const TextStyle(
-          color: AppColors.textSecondary,
-          fontSize: 13,
-          fontWeight: FontWeight.w500));
+  Widget _fieldLabel(String text) => Padding(
+        padding: const EdgeInsets.only(bottom: 7),
+        child: Text(
+          text,
+          style: const TextStyle(
+            color: AppColors.textSecondary,
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.3,
+          ),
+        ),
+      );
 
-  Widget _textField(TextEditingController ctrl, String hint) => TextField(
-        controller: ctrl,
+  Widget _textField(TextEditingController ctrl, String hint) => Padding(
+        padding: const EdgeInsets.only(bottom: 0),
+        child: TextField(
+          controller: ctrl,
+          style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
+          onChanged: (_) => setState(() {}),
+          decoration: InputDecoration(
+            hintText: hint,
+            hintStyle:
+                const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+            filled: true,
+            fillColor: AppColors.bgSurface,
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: AppColors.border),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: AppColors.border),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide:
+                  const BorderSide(color: AppColors.accent, width: 1.5),
+            ),
+          ),
+        ),
+      );
+
+  Widget _dropdown<T>({
+    required T value,
+    required List<T> items,
+    required ValueChanged<T?> onChanged,
+  }) =>
+      DropdownButtonFormField<T>(
+        initialValue: value,
+        onChanged: onChanged,
+        dropdownColor: AppColors.bgElevated,
+        icon: const Icon(Icons.keyboard_arrow_down,
+            color: AppColors.textSecondary),
         style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
-        onChanged: (_) => setState(() {}),
         decoration: InputDecoration(
-          hintText: hint,
-          hintStyle:
-              const TextStyle(color: AppColors.textSecondary, fontSize: 14),
           filled: true,
           fillColor: AppColors.bgSurface,
           contentPadding:
-              const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: const BorderSide(color: AppColors.border),
@@ -412,45 +715,17 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: AppColors.gold),
+            borderSide:
+                const BorderSide(color: AppColors.accent, width: 1.5),
           ),
         ),
+        items: items
+            .map((e) => DropdownMenuItem<T>(
+                  value: e,
+                  child: Text(e.toString(),
+                      style:
+                          const TextStyle(color: AppColors.textPrimary)),
+                ))
+            .toList(),
       );
-
-  Widget _dropdown<T>({
-    required T value,
-    required List<T> items,
-    required ValueChanged<T?> onChanged,
-  }) {
-    return DropdownButtonFormField<T>(
-      initialValue: value,
-      onChanged: onChanged,
-      dropdownColor: AppColors.bgElevated,
-      style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: AppColors.bgSurface,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: AppColors.border),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: AppColors.border),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: AppColors.gold),
-        ),
-      ),
-      items: items
-          .map((e) => DropdownMenuItem<T>(
-              value: e,
-              child: Text(e.toString(),
-                  style: const TextStyle(color: AppColors.textPrimary))))
-          .toList(),
-    );
-  }
 }

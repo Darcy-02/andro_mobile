@@ -44,13 +44,13 @@ class _CountdownPillState extends State<CountdownPill> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: AppColors.goldMuted,
+        color: AppColors.accentMuted,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
         label,
         style: const TextStyle(
-          color: AppColors.gold,
+          color: AppColors.accent,
           fontSize: 11,
           fontWeight: FontWeight.w500,
         ),

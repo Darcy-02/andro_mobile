@@ -143,7 +143,7 @@ class RsvpCard extends StatelessWidget {
     } else if (isToday) {
       label = 'Today';
       bg = const Color(0x33E5A020);
-      fg = AppColors.gold;
+      fg = AppColors.accent;
     } else {
       label = 'Upcoming';
       bg = const Color(0x1A3FB950);

@@ -28,7 +28,7 @@ class OpportunityCard extends StatelessWidget {
           color: AppColors.bgSurface,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: urgent ? AppColors.gold.withValues(alpha: 0.5) : AppColors.border,
+            color: urgent ? AppColors.accent.withValues(alpha: 0.5) : AppColors.border,
           ),
         ),
         child: Column(
@@ -63,7 +63,7 @@ class OpportunityCard extends StatelessWidget {
               opportunity.isExpired
                   ? 'Closed ${DateFormat('d MMM').format(opportunity.deadline)}'
                   : 'Deadline: ${DateFormat('d MMM yyyy').format(opportunity.deadline)}',
-              color: urgent ? AppColors.gold : AppColors.textSecondary,
+              color: urgent ? AppColors.accent : AppColors.textSecondary,
             ),
             const SizedBox(height: 8),
             Text(opportunity.eligibility,
@@ -81,12 +81,12 @@ class OpportunityCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: AppColors.goldMuted,
+        color: AppColors.accentMuted,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(_typeLabel(),
           style: const TextStyle(
-              color: AppColors.gold,
+              color: AppColors.accent,
               fontSize: 11,
               fontWeight: FontWeight.w500)),
     );
@@ -95,12 +95,12 @@ class OpportunityCard extends StatelessWidget {
   Widget _urgentChip(int days) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
         decoration: BoxDecoration(
-          color: AppColors.gold.withValues(alpha: 0.15),
+          color: AppColors.accent.withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text('$days days left',
             style: const TextStyle(
-                color: AppColors.gold,
+                color: AppColors.accent,
                 fontSize: 11,
                 fontWeight: FontWeight.w500)),
       );

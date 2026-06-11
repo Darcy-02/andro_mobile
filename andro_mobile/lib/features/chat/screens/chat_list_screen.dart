@@ -38,7 +38,7 @@ class ChatListScreen extends ConsumerWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 7, vertical: 2),
                           decoration: BoxDecoration(
-                            color: AppColors.gold,
+                            color: AppColors.accent,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text('$totalUnread',
@@ -117,7 +117,7 @@ class _ChatRow extends ConsumerWidget {
                         _timeLabel(chat.lastMessageTime),
                         style: TextStyle(
                             color: chat.unreadCount > 0
-                                ? AppColors.gold
+                                ? AppColors.accent
                                 : AppColors.textSecondary,
                             fontSize: 11),
                       ),
@@ -145,7 +145,7 @@ class _ChatRow extends ConsumerWidget {
                           width: 20,
                           height: 20,
                           decoration: const BoxDecoration(
-                              color: AppColors.gold, shape: BoxShape.circle),
+                              color: AppColors.accent, shape: BoxShape.circle),
                           child: Center(
                             child: Text('${chat.unreadCount}',
                                 style: const TextStyle(
@@ -186,10 +186,10 @@ class _ChatRow extends ConsumerWidget {
       width: 44,
       height: 44,
       decoration: BoxDecoration(
-        color: AppColors.goldMuted,
+        color: AppColors.accentMuted,
         borderRadius: BorderRadius.circular(22),
       ),
-      child: Icon(icon, color: AppColors.gold, size: 20),
+      child: Icon(icon, color: AppColors.accent, size: 20),
     );
   }
 

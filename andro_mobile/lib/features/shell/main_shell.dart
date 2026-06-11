@@ -72,14 +72,14 @@ class _BottomNav extends StatelessWidget {
           children: [
             Icon(
               isActive ? active : inactive,
-              color: isActive ? AppColors.gold : AppColors.textSecondary,
+              color: isActive ? AppColors.accent : AppColors.textSecondary,
               size: 22,
             ),
             const SizedBox(height: 3),
             Text(
               label,
               style: TextStyle(
-                color: isActive ? AppColors.gold : AppColors.textSecondary,
+                color: isActive ? AppColors.accent : AppColors.textSecondary,
                 fontSize: 10,
                 fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
               ),
@@ -102,7 +102,7 @@ class _BottomNav extends StatelessWidget {
               width: 36,
               height: 36,
               decoration: const BoxDecoration(
-                color: AppColors.gold,
+                color: AppColors.accent,
                 shape: BoxShape.circle,
               ),
               child: const Icon(Icons.add, color: AppColors.bgPrimary, size: 22),
@@ -209,10 +209,10 @@ class _CreateSheet extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: AppColors.goldMuted,
+                color: AppColors.accentMuted,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Icon(icon, color: AppColors.gold, size: 20),
+              child: Icon(icon, color: AppColors.accent, size: 20),
             ),
             const SizedBox(width: 14),
             Expanded(

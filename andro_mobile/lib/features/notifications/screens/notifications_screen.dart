@@ -38,7 +38,7 @@ class NotificationsScreen extends ConsumerWidget {
               onPressed: notifier.markAllRead,
               child: const Text('Mark all read',
                   style: TextStyle(
-                      color: AppColors.gold, fontSize: 13)),
+                      color: AppColors.accent, fontSize: 13)),
             ),
         ],
       ),
@@ -131,7 +131,7 @@ class _NotifRow extends StatelessWidget {
         decoration: BoxDecoration(
           color: notification.isRead
               ? Colors.transparent
-              : AppColors.goldMuted.withValues(alpha: 0.3),
+              : AppColors.accentMuted.withValues(alpha: 0.3),
           border: const Border(
               bottom: BorderSide(color: AppColors.border)),
         ),
@@ -145,7 +145,7 @@ class _NotifRow extends StatelessWidget {
                   width: 6,
                   height: 6,
                   decoration: const BoxDecoration(
-                      color: AppColors.gold, shape: BoxShape.circle),
+                      color: AppColors.accent, shape: BoxShape.circle),
                 ),
               )
             else
@@ -157,7 +157,7 @@ class _NotifRow extends StatelessWidget {
                 color: AppColors.bgElevated,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Icon(_icon(), color: AppColors.gold, size: 18),
+              child: Icon(_icon(), color: AppColors.accent, size: 18),
             ),
             const SizedBox(width: 12),
             Expanded(

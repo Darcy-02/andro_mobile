@@ -118,10 +118,10 @@ class _MessageBubble extends StatelessWidget {
           if (!isMe) ...[
             CircleAvatar(
               radius: 14,
-              backgroundColor: AppColors.goldMuted,
+              backgroundColor: AppColors.accentMuted,
               child: Text(message.senderName[0],
                   style: const TextStyle(
-                      color: AppColors.gold,
+                      color: AppColors.accent,
                       fontSize: 11,
                       fontWeight: FontWeight.w600)),
             ),
@@ -144,7 +144,7 @@ class _MessageBubble extends StatelessWidget {
                       horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
                     color: isMe
-                        ? AppColors.goldMuted
+                        ? AppColors.accentMuted
                         : AppColors.bgSurface,
                     borderRadius: BorderRadius.only(
                       topLeft: const Radius.circular(12),
@@ -154,13 +154,13 @@ class _MessageBubble extends StatelessWidget {
                     ),
                     border: Border.all(
                         color: isMe
-                            ? AppColors.gold.withValues(alpha: 0.3)
+                            ? AppColors.accent.withValues(alpha: 0.3)
                             : AppColors.border),
                   ),
                   child: Text(message.content,
                       style: TextStyle(
                           color: isMe
-                              ? AppColors.gold
+                              ? AppColors.accent
                               : AppColors.textPrimary,
                           fontSize: 14)),
                 ),
@@ -269,7 +269,7 @@ class _InputBar extends StatelessWidget {
                 focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
                     borderSide:
-                        const BorderSide(color: AppColors.gold)),
+                        const BorderSide(color: AppColors.accent)),
               ),
             ),
           ),
@@ -280,7 +280,7 @@ class _InputBar extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: const BoxDecoration(
-                  color: AppColors.gold, shape: BoxShape.circle),
+                  color: AppColors.accent, shape: BoxShape.circle),
               child: const Icon(Icons.send,
                   color: AppColors.bgPrimary, size: 18),
             ),

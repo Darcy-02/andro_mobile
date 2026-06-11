@@ -26,14 +26,14 @@ class ProfileHeader extends StatelessWidget {
   Widget _avatar() {
     return CircleAvatar(
       radius: 36,
-      backgroundColor: AppColors.goldMuted,
+      backgroundColor: AppColors.accentMuted,
       backgroundImage:
           user.avatarUrl != null ? NetworkImage(user.avatarUrl!) : null,
       child: user.avatarUrl == null
           ? Text(
               user.fullName[0].toUpperCase(),
               style: const TextStyle(
-                color: AppColors.gold,
+                color: AppColors.accent,
                 fontSize: 26,
                 fontWeight: FontWeight.w600,
               ),
@@ -72,13 +72,13 @@ class ProfileHeader extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: AppColors.goldMuted,
+        color: AppColors.accentMuted,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
         'ALU ${user.campus}',
         style: const TextStyle(
-          color: AppColors.gold,
+          color: AppColors.accent,
           fontSize: 11,
           fontWeight: FontWeight.w500,
           letterSpacing: 0.8,

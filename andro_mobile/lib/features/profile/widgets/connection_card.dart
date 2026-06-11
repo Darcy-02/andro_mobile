@@ -44,11 +44,11 @@ class ConnectionCard extends StatelessWidget {
   Widget _avatar() {
     return CircleAvatar(
       radius: 22,
-      backgroundColor: AppColors.goldMuted,
+      backgroundColor: AppColors.accentMuted,
       child: Text(
         user.fullName[0].toUpperCase(),
         style: const TextStyle(
-          color: AppColors.gold,
+          color: AppColors.accent,
           fontSize: 16,
           fontWeight: FontWeight.w600,
         ),
@@ -82,13 +82,13 @@ class ConnectionCard extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
           decoration: BoxDecoration(
-            color: AppColors.goldMuted,
+            color: AppColors.accentMuted,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Text(
             'ALU ${user.campus}',
             style: const TextStyle(
-              color: AppColors.gold,
+              color: AppColors.accent,
               fontSize: 10,
               fontWeight: FontWeight.w500,
               letterSpacing: 0.6,
@@ -104,11 +104,11 @@ class ConnectionCard extends StatelessWidget {
       case ConnectionStatus.connected:
         return _pill('Connected', AppColors.bgElevated, AppColors.textSecondary);
       case ConnectionStatus.pending:
-        return _pill('Pending', AppColors.goldMuted, AppColors.gold);
+        return _pill('Pending', AppColors.accentMuted, AppColors.accent);
       case ConnectionStatus.none:
         return GestureDetector(
           onTap: onConnect,
-          child: _pill('Connect', AppColors.gold, AppColors.bgPrimary),
+          child: _pill('Connect', AppColors.accent, AppColors.bgPrimary),
         );
     }
   }

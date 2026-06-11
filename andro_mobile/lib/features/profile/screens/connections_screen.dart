@@ -61,9 +61,9 @@ class _ConnectionsScreenState extends ConsumerState<ConnectionsScreen>
         bottom: _isOwnProfile
             ? TabBar(
                 controller: _tabController,
-                labelColor: AppColors.gold,
+                labelColor: AppColors.accent,
                 unselectedLabelColor: AppColors.textSecondary,
-                indicatorColor: AppColors.gold,
+                indicatorColor: AppColors.accent,
                 indicatorSize: TabBarIndicatorSize.label,
                 dividerColor: AppColors.border,
                 tabs: const [
@@ -123,7 +123,7 @@ class _ConnectionsScreenState extends ConsumerState<ConnectionsScreen>
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: AppColors.gold),
+              borderSide: const BorderSide(color: AppColors.accent),
             ),
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
@@ -253,10 +253,10 @@ class _IncomingCard extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 22,
-            backgroundColor: AppColors.goldMuted,
+            backgroundColor: AppColors.accentMuted,
             child: Text(user.fullName[0],
                 style: const TextStyle(
-                    color: AppColors.gold, fontWeight: FontWeight.w600)),
+                    color: AppColors.accent, fontWeight: FontWeight.w600)),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -279,7 +279,7 @@ class _IncomingCard extends StatelessWidget {
           const SizedBox(width: 8),
           GestureDetector(
             onTap: () => notifier.accept(user.id),
-            child: _pill('Accept', AppColors.gold, AppColors.bgPrimary),
+            child: _pill('Accept', AppColors.accent, AppColors.bgPrimary),
           ),
           const SizedBox(width: 8),
           GestureDetector(

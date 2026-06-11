@@ -94,7 +94,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             onPressed: _save,
             child: const Text('Save',
                 style: TextStyle(
-                    color: AppColors.gold, fontWeight: FontWeight.w600)),
+                    color: AppColors.accent, fontWeight: FontWeight.w600)),
           ),
         ],
       ),
@@ -151,7 +151,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           children: [
             CircleAvatar(
               radius: 44,
-              backgroundColor: AppColors.goldMuted,
+              backgroundColor: AppColors.accentMuted,
               backgroundImage: _localAvatarPath != null
                   ? FileImage(File(_localAvatarPath!))
                   : null,
@@ -159,7 +159,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   ? Text(
                       user.fullName[0].toUpperCase(),
                       style: const TextStyle(
-                          color: AppColors.gold,
+                          color: AppColors.accent,
                           fontSize: 32,
                           fontWeight: FontWeight.w600),
                     )
@@ -172,7 +172,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 width: 28,
                 height: 28,
                 decoration: const BoxDecoration(
-                  color: AppColors.gold,
+                  color: AppColors.accent,
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(Icons.camera_alt,
@@ -275,17 +275,17 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             padding:
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
-              color: selected ? AppColors.goldMuted : AppColors.bgSurface,
+              color: selected ? AppColors.accentMuted : AppColors.bgSurface,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: selected ? AppColors.gold : AppColors.border,
+                color: selected ? AppColors.accent : AppColors.border,
               ),
             ),
             child: Text(
               tag,
               style: TextStyle(
                 color: selected
-                    ? AppColors.gold
+                    ? AppColors.accent
                     : AppColors.textSecondary,
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
@@ -312,7 +312,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: AppColors.gold),
+          borderSide: const BorderSide(color: AppColors.accent),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),

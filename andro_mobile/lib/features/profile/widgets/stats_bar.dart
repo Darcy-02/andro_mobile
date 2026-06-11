@@ -83,7 +83,7 @@ class _StatColumn extends StatelessWidget {
           Text(
             '$value',
             style: const TextStyle(
-              color: AppColors.gold,
+              color: AppColors.accent,
               fontSize: 20,
               fontWeight: FontWeight.w600,
             ),

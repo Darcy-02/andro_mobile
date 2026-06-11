@@ -100,7 +100,7 @@ class _SubmitStartupScreenState extends ConsumerState<SubmitStartupScreen> {
             onPressed: _submit,
             child: const Text('Save',
                 style: TextStyle(
-                    color: AppColors.gold, fontWeight: FontWeight.w600)),
+                    color: AppColors.accent, fontWeight: FontWeight.w600)),
           ),
         ],
       ),
@@ -230,10 +230,10 @@ class _SubmitStartupScreenState extends ConsumerState<SubmitStartupScreen> {
               margin: const EdgeInsets.only(right: 8),
               padding: const EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(
-                color: selected ? AppColors.gold : AppColors.bgSurface,
+                color: selected ? AppColors.accent : AppColors.bgSurface,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                    color: selected ? AppColors.gold : AppColors.border),
+                    color: selected ? AppColors.accent : AppColors.border),
               ),
               alignment: Alignment.center,
               child: Text(
@@ -313,15 +313,15 @@ class _SubmitStartupScreenState extends ConsumerState<SubmitStartupScreen> {
             padding:
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
-              color: selected ? AppColors.goldMuted : AppColors.bgSurface,
+              color: selected ? AppColors.accentMuted : AppColors.bgSurface,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                  color: selected ? AppColors.gold : AppColors.border),
+                  color: selected ? AppColors.accent : AppColors.border),
             ),
             child: Text(role,
                 style: TextStyle(
                   color: selected
-                      ? AppColors.gold
+                      ? AppColors.accent
                       : AppColors.textSecondary,
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
@@ -346,7 +346,7 @@ class _SubmitStartupScreenState extends ConsumerState<SubmitStartupScreen> {
             borderSide: const BorderSide(color: AppColors.border)),
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: AppColors.gold)),
+            borderSide: const BorderSide(color: AppColors.accent)),
         errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: const BorderSide(color: AppColors.danger)),

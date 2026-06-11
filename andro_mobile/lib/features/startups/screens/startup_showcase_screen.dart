@@ -49,7 +49,7 @@ class _StartupShowcaseScreenState
           context,
           MaterialPageRoute(builder: (_) => const SubmitStartupScreen()),
         ),
-        backgroundColor: AppColors.gold,
+        backgroundColor: AppColors.accent,
         foregroundColor: AppColors.bgPrimary,
         icon: const Icon(Icons.add),
         label: const Text('Submit My Startup',
@@ -135,10 +135,10 @@ class _FilterChip extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: selected ? AppColors.gold : AppColors.bgSurface,
+          color: selected ? AppColors.accent : AppColors.bgSurface,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-              color: selected ? AppColors.gold : AppColors.border),
+              color: selected ? AppColors.accent : AppColors.border),
         ),
         child: Text(
           label,

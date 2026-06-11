@@ -17,7 +17,7 @@ class DevMenu extends ConsumerWidget {
         surfaceTintColor: Colors.transparent,
         title: const Row(
           children: [
-            Icon(Icons.developer_mode, color: AppColors.gold, size: 18),
+            Icon(Icons.developer_mode, color: AppColors.accent, size: 18),
             SizedBox(width: 8),
             Text(
               'ANDRO · Dev Preview',
@@ -135,7 +135,7 @@ class DevMenu extends ConsumerWidget {
         border: Border.all(color: AppColors.border),
       ),
       child: ListTile(
-        leading: Icon(icon, color: AppColors.gold, size: 20),
+        leading: Icon(icon, color: AppColors.accent, size: 20),
         title: Text(
           label,
           style: const TextStyle(

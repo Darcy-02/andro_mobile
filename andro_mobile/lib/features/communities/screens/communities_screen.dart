@@ -52,9 +52,9 @@ class _CommunitiesScreenState extends ConsumerState<CommunitiesScreen>
                 fontWeight: FontWeight.w600)),
         bottom: TabBar(
           controller: _tab,
-          labelColor: AppColors.gold,
+          labelColor: AppColors.accent,
           unselectedLabelColor: AppColors.textSecondary,
-          indicatorColor: AppColors.gold,
+          indicatorColor: AppColors.accent,
           indicatorSize: TabBarIndicatorSize.label,
           dividerColor: AppColors.border,
           tabs: const [Tab(text: 'All Clubs'), Tab(text: 'My Clubs')],
@@ -106,7 +106,7 @@ class _CommunitiesScreenState extends ConsumerState<CommunitiesScreen>
                 borderSide: const BorderSide(color: AppColors.border)),
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: const BorderSide(color: AppColors.gold)),
+                borderSide: const BorderSide(color: AppColors.accent)),
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           ),
@@ -129,16 +129,16 @@ class _CommunitiesScreenState extends ConsumerState<CommunitiesScreen>
               padding:
                   const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               decoration: BoxDecoration(
-                color: active ? AppColors.goldMuted : AppColors.bgSurface,
+                color: active ? AppColors.accentMuted : AppColors.bgSurface,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                    color: active ? AppColors.gold : AppColors.border),
+                    color: active ? AppColors.accent : AppColors.border),
               ),
               child: Text(
                 cat == null ? 'All' : _catLabel(cat),
                 style: TextStyle(
                     color: active
-                        ? AppColors.gold
+                        ? AppColors.accent
                         : AppColors.textSecondary,
                     fontSize: 12,
                     fontWeight: active ? FontWeight.w500 : FontWeight.w400),
@@ -302,14 +302,14 @@ class _CommunityCard extends StatelessWidget {
       width: 44,
       height: 44,
       decoration: BoxDecoration(
-        color: AppColors.goldMuted,
+        color: AppColors.accentMuted,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Center(
         child: Text(
           community.name[0],
           style: const TextStyle(
-              color: AppColors.gold,
+              color: AppColors.accent,
               fontSize: 18,
               fontWeight: FontWeight.w700),
         ),
@@ -336,17 +336,17 @@ class _CommunityCard extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: AppColors.goldMuted,
+            color: AppColors.accentMuted,
             borderRadius: BorderRadius.circular(20),
           ),
           child: const Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.check, color: AppColors.gold, size: 12),
+              Icon(Icons.check, color: AppColors.accent, size: 12),
               SizedBox(width: 4),
               Text('Joined',
                   style: TextStyle(
-                      color: AppColors.gold,
+                      color: AppColors.accent,
                       fontSize: 12,
                       fontWeight: FontWeight.w500)),
             ],
@@ -361,11 +361,11 @@ class _CommunityCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.transparent,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppColors.gold),
+          border: Border.all(color: AppColors.accent),
         ),
         child: const Text('Join',
             style: TextStyle(
-                color: AppColors.gold,
+                color: AppColors.accent,
                 fontSize: 12,
                 fontWeight: FontWeight.w500)),
       ),

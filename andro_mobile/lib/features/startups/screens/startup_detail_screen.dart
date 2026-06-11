@@ -135,10 +135,10 @@ class StartupDetailScreen extends ConsumerWidget {
                   children: [
                     CircleAvatar(
                       radius: 18,
-                      backgroundColor: AppColors.goldMuted,
+                      backgroundColor: AppColors.accentMuted,
                       child: Text(user.fullName[0],
                           style: const TextStyle(
-                              color: AppColors.gold,
+                              color: AppColors.accent,
                               fontWeight: FontWeight.w600)),
                     ),
                     const SizedBox(width: 12),
@@ -165,12 +165,12 @@ class StartupDetailScreen extends ConsumerWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 7, vertical: 3),
                         decoration: BoxDecoration(
-                          color: AppColors.goldMuted,
+                          color: AppColors.accentMuted,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: const Text('Founder',
                             style: TextStyle(
-                                color: AppColors.gold,
+                                color: AppColors.accent,
                                 fontSize: 10,
                                 fontWeight: FontWeight.w500)),
                       ),
@@ -215,7 +215,7 @@ class StartupDetailScreen extends ConsumerWidget {
   Widget _stageBadge(StartupStage stage) {
     final (label, bg, fg) = switch (stage) {
       StartupStage.idea => ('Idea', AppColors.bgElevated, AppColors.textSecondary),
-      StartupStage.prototype => ('Prototype', AppColors.goldMuted, AppColors.gold),
+      StartupStage.prototype => ('Prototype', AppColors.accentMuted, AppColors.accent),
       StartupStage.earlyRevenue => ('Early Revenue', const Color(0x1A3FB950), AppColors.success),
     };
     return Container(
@@ -252,7 +252,7 @@ class StartupDetailScreen extends ConsumerWidget {
         child: ElevatedButton(
           onPressed: enabled ? onTap : null,
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.gold,
+            backgroundColor: AppColors.accent,
             foregroundColor: AppColors.bgPrimary,
             disabledBackgroundColor: AppColors.bgElevated,
             disabledForegroundColor: AppColors.textSecondary,

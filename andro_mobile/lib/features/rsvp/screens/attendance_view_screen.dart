@@ -53,7 +53,7 @@ class AttendanceViewScreen extends ConsumerWidget {
         children: [
           _eventTitle(event),
           const SizedBox(height: 24),
-          _statRow('Going', goingCount, capacity, AppColors.gold),
+          _statRow('Going', goingCount, capacity, AppColors.accent),
           const SizedBox(height: 12),
           _statRow('Interested', (goingCount * 0.4).round(), capacity,
               AppColors.textSecondary),
@@ -160,10 +160,10 @@ class AttendanceViewScreen extends ConsumerWidget {
         children: [
           CircleAvatar(
             radius: 18,
-            backgroundColor: AppColors.goldMuted,
+            backgroundColor: AppColors.accentMuted,
             child: Text(user.fullName[0],
                 style: const TextStyle(
-                    color: AppColors.gold,
+                    color: AppColors.accent,
                     fontSize: 14,
                     fontWeight: FontWeight.w600)),
           ),
@@ -237,7 +237,7 @@ class AttendanceViewScreen extends ConsumerWidget {
               icon: Icon(icon, size: 18, color: AppColors.bgPrimary),
               label: Text(label),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.gold,
+                backgroundColor: AppColors.accent,
                 foregroundColor: AppColors.bgPrimary,
                 elevation: 0,
                 shape: RoundedRectangleBorder(

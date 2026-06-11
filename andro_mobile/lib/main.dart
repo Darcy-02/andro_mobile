@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'app_router.dart';
+import 'core/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,14 +28,9 @@ class AndroApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       title: 'Andro',
       routerConfig: router,
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF2B1D17),
-        colorScheme: const ColorScheme.dark(
-          primary: Color(0xFFC2874B),
-          surface: Color(0xFF3A241D),
-        ),
-      ),
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      themeMode: ThemeMode.dark,
     );
   }
 }

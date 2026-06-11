@@ -22,6 +22,13 @@ class FeedScreen extends ConsumerStatefulWidget {
 class _FeedScreenState extends ConsumerState<FeedScreen> {
   _FeedFilter _filter = _FeedFilter.all;
 
+  // Top 3 upcoming events shown in featured strip — excluded from main list
+  static final _featuredIds = mockEvents
+      .where((e) => e.status == EventStatus.upcoming)
+      .take(3)
+      .map((e) => e.id)
+      .toSet();
+
   @override
   Widget build(BuildContext context) {
     final unread = ref.watch(unreadCountProvider);
@@ -39,22 +46,10 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
             if (_filter == _FeedFilter.all ||
                 _filter == _FeedFilter.opportunities)
               SliverToBoxAdapter(child: _opportunitiesSection()),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
-                child: Text(
-                  _sectionTitle(),
-                  style: const TextStyle(
-                    color: AppColors.textSecondary,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.8,
-                  ),
-                ),
-              ),
-            ),
+            if (_sectionTitle().isNotEmpty)
+              SliverToBoxAdapter(child: _sectionHeader(_sectionTitle())),
             ..._feedItems(),
-            const SliverToBoxAdapter(child: SizedBox(height: 24)),
+            const SliverToBoxAdapter(child: SizedBox(height: 32)),
           ],
         ),
       ),
@@ -62,22 +57,30 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
   }
 
   Widget _header(int unread, DateTime now) {
+    final hour = now.hour;
+    final greeting = hour < 12
+        ? 'Good morning'
+        : hour < 17
+            ? 'Good afternoon'
+            : 'Good evening';
+
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+      padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Good day, Ayo 👋',
-                style: TextStyle(
+              Text(
+                '$greeting, Ayo 👋',
+                style: const TextStyle(
                     color: AppColors.textPrimary,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600),
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700),
               ),
-              const SizedBox(height: 2),
+              const SizedBox(height: 3),
               Text(
                 DateFormat('EEEE, d MMMM').format(now),
                 style: const TextStyle(
@@ -88,13 +91,14 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
           GestureDetector(
             onTap: () => context.push('/notifications'),
             child: Stack(
+              clipBehavior: Clip.none,
               children: [
                 Container(
-                  width: 40,
-                  height: 40,
+                  width: 42,
+                  height: 42,
                   decoration: BoxDecoration(
                     color: AppColors.bgSurface,
-                    borderRadius: BorderRadius.circular(10),
+                    shape: BoxShape.circle,
                     border: Border.all(color: AppColors.border),
                   ),
                   child: const Icon(Icons.notifications_outlined,
@@ -102,13 +106,22 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                 ),
                 if (unread > 0)
                   Positioned(
-                    right: 6,
-                    top: 6,
+                    right: 0,
+                    top: 0,
                     child: Container(
-                      width: 8,
-                      height: 8,
+                      width: 16,
+                      height: 16,
                       decoration: const BoxDecoration(
                           color: AppColors.danger, shape: BoxShape.circle),
+                      child: Center(
+                        child: Text(
+                          '$unread',
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 9,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      ),
                     ),
                   ),
               ],
@@ -121,31 +134,30 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
 
   Widget _filterRow() {
     return SizedBox(
-      height: 48,
+      height: 52,
       child: ListView(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+        padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
         children: _FeedFilter.values.map((f) {
           final active = _filter == f;
           return GestureDetector(
             onTap: () => setState(() => _filter = f),
-            child: Container(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 150),
               margin: const EdgeInsets.only(right: 8),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
               decoration: BoxDecoration(
-                color: active ? AppColors.goldMuted : AppColors.bgSurface,
+                color: active ? AppColors.accent : AppColors.bgSurface,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                    color: active ? AppColors.gold : AppColors.border),
+                    color: active ? AppColors.accent : AppColors.border),
               ),
               child: Text(
                 _filterLabel(f),
                 style: TextStyle(
-                  color: active ? AppColors.gold : AppColors.textSecondary,
+                  color: active ? AppColors.bgPrimary : AppColors.textSecondary,
                   fontSize: 13,
-                  fontWeight:
-                      active ? FontWeight.w500 : FontWeight.w400,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
@@ -161,33 +173,24 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
         .take(3)
         .toList();
 
+    if (featured.isEmpty) return const SizedBox.shrink();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.fromLTRB(16, 20, 16, 8),
-          child: Text('FEATURED',
-              style: TextStyle(
-                  color: AppColors.textSecondary,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: 0.8)),
-        ),
+        _sectionHeader('FEATURED'),
         SizedBox(
-          height: 220,
+          height: 200,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.only(left: 16),
+            padding: const EdgeInsets.only(left: 16, right: 4),
             itemCount: featured.length,
             itemBuilder: (_, i) => SizedBox(
-              width: 280,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 12),
-                child: EventCard(
-                  event: featured[i],
-                  compact: true,
-                  onTap: () => context.push('/event/${featured[i].id}'),
-                ),
+              width: 270,
+              child: EventCard(
+                event: featured[i],
+                compact: true,
+                onTap: () => context.push('/event/${featured[i].id}'),
               ),
             ),
           ),
@@ -199,23 +202,17 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
   Widget _opportunitiesSection() {
     final ops = mockOpportunities.where((o) => !o.isExpired).take(3).toList();
 
+    if (ops.isEmpty) return const SizedBox.shrink();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.fromLTRB(16, 20, 16, 8),
-          child: Text('LATEST OPPORTUNITIES',
-              style: TextStyle(
-                  color: AppColors.textSecondary,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: 0.8)),
-        ),
+        _sectionHeader('OPPORTUNITIES'),
         SizedBox(
-          height: 160,
+          height: 170,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.only(left: 16),
+            padding: const EdgeInsets.only(left: 16, right: 4),
             itemCount: ops.length,
             itemBuilder: (_, i) => SizedBox(
               width: 260,
@@ -237,10 +234,16 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
     switch (_filter) {
       case _FeedFilter.events:
       case _FeedFilter.all:
+        // Exclude events already shown in featured strip
         final events = mockEvents
-            .where((e) => e.status == EventStatus.upcoming)
+            .where((e) =>
+                e.status == EventStatus.upcoming &&
+                !_featuredIds.contains(e.id))
             .toList()
           ..sort((a, b) => a.startTime.compareTo(b.startTime));
+
+        if (events.isEmpty) return [];
+
         return events
             .map<Widget>((e) => SliverToBoxAdapter(
                   child: EventCard(
@@ -264,6 +267,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
               Icons.groups_outlined,
               'Club feed coming soon',
               'Join communities to see their posts here',
+              action: ('Browse communities', () => context.push('/communities')),
             ),
           ),
         ];
@@ -281,24 +285,71 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
     }
   }
 
-  Widget _emptyState(IconData icon, String title, String subtitle) {
+  Widget _sectionHeader(String title) => Padding(
+        padding: const EdgeInsets.fromLTRB(16, 22, 16, 10),
+        child: Text(
+          title,
+          style: const TextStyle(
+            color: AppColors.textSecondary,
+            fontSize: 11,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 1.0,
+          ),
+        ),
+      );
+
+  Widget _emptyState(
+    IconData icon,
+    String title,
+    String subtitle, {
+    (String label, VoidCallback onTap)? action,
+  }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 32),
+      padding: const EdgeInsets.symmetric(vertical: 52, horizontal: 32),
       child: Column(
         children: [
-          Icon(icon, color: AppColors.textSecondary, size: 48),
-          const SizedBox(height: 12),
+          Container(
+            width: 64,
+            height: 64,
+            decoration: BoxDecoration(
+              color: AppColors.bgSurface,
+              shape: BoxShape.circle,
+              border: Border.all(color: AppColors.border),
+            ),
+            child: Icon(icon, color: AppColors.textSecondary, size: 28),
+          ),
+          const SizedBox(height: 16),
           Text(title,
               textAlign: TextAlign.center,
               style: const TextStyle(
                   color: AppColors.textPrimary,
                   fontSize: 16,
-                  fontWeight: FontWeight.w500)),
+                  fontWeight: FontWeight.w600)),
           const SizedBox(height: 6),
           Text(subtitle,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                  color: AppColors.textSecondary, fontSize: 13)),
+                  color: AppColors.textSecondary, fontSize: 13, height: 1.5)),
+          if (action != null) ...[
+            const SizedBox(height: 20),
+            GestureDetector(
+              onTap: action.$2,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                decoration: BoxDecoration(
+                  color: AppColors.accentMuted,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: AppColors.accent.withValues(alpha: 0.5)),
+                ),
+                child: Text(action.$1,
+                    style: const TextStyle(
+                        color: AppColors.accent,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600)),
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -306,16 +357,11 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
 
   String _filterLabel(_FeedFilter f) {
     switch (f) {
-      case _FeedFilter.all:
-        return 'All';
-      case _FeedFilter.events:
-        return 'Events';
-      case _FeedFilter.opportunities:
-        return 'Opportunities';
-      case _FeedFilter.clubs:
-        return 'Clubs';
-      case _FeedFilter.academics:
-        return 'Academics';
+      case _FeedFilter.all: return 'All';
+      case _FeedFilter.events: return 'Events';
+      case _FeedFilter.opportunities: return 'Opportunities';
+      case _FeedFilter.clubs: return 'Clubs';
+      case _FeedFilter.academics: return 'Academics';
     }
   }
 
@@ -323,7 +369,13 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
     switch (_filter) {
       case _FeedFilter.all:
       case _FeedFilter.events:
-        return 'UPCOMING EVENTS';
+        // Only show header if there are events not in featured
+        final remaining = mockEvents
+            .where((e) =>
+                e.status == EventStatus.upcoming &&
+                !_featuredIds.contains(e.id))
+            .length;
+        return remaining > 0 ? 'MORE EVENTS' : '';
       case _FeedFilter.opportunities:
         return 'ALL OPPORTUNITIES';
       default:

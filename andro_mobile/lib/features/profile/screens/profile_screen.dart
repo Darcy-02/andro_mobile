@@ -107,9 +107,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
             delegate: _TabBarDelegate(
               TabBar(
                 controller: _tabController,
-                labelColor: AppColors.gold,
+                labelColor: AppColors.accent,
                 unselectedLabelColor: AppColors.textSecondary,
-                indicatorColor: AppColors.gold,
+                indicatorColor: AppColors.accent,
                 indicatorSize: TabBarIndicatorSize.label,
                 dividerColor: AppColors.border,
                 tabs: const [
@@ -204,12 +204,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
         ),
       ConnectionStatus.pending => (
           'Pending',
-          AppColors.goldMuted,
-          AppColors.gold
+          AppColors.accentMuted,
+          AppColors.accent
         ),
       ConnectionStatus.none => (
           'Connect',
-          AppColors.gold,
+          AppColors.accent,
           AppColors.bgPrimary
         ),
     };
@@ -315,13 +315,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                   padding: const EdgeInsets.symmetric(
                       horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
-                    color: AppColors.goldMuted,
+                    color: AppColors.accentMuted,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
                     '${items.length}',
                     style: const TextStyle(
-                        color: AppColors.gold, fontSize: 12),
+                        color: AppColors.accent, fontSize: 12),
                   ),
                 ),
               ],

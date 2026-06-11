@@ -106,8 +106,8 @@ class StartupCard extends StatelessWidget {
       StartupStage.idea => ('Idea', AppColors.bgElevated, AppColors.textSecondary),
       StartupStage.prototype => (
           'Prototype',
-          AppColors.goldMuted,
-          AppColors.gold,
+          AppColors.accentMuted,
+          AppColors.accent,
         ),
       StartupStage.earlyRevenue => (
           'Early Revenue',

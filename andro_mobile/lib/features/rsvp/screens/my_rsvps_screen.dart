@@ -50,9 +50,9 @@ class _MyRsvpsScreenState extends ConsumerState<MyRsvpsScreen>
                 fontWeight: FontWeight.w600)),
         bottom: TabBar(
           controller: _tabController,
-          labelColor: AppColors.gold,
+          labelColor: AppColors.accent,
           unselectedLabelColor: AppColors.textSecondary,
-          indicatorColor: AppColors.gold,
+          indicatorColor: AppColors.accent,
           indicatorSize: TabBarIndicatorSize.label,
           dividerColor: AppColors.border,
           tabs: const [
@@ -64,7 +64,7 @@ class _MyRsvpsScreenState extends ConsumerState<MyRsvpsScreen>
       ),
       body: ref.watch(rsvpProvider).when(
             loading: () => const Center(
-                child: CircularProgressIndicator(color: AppColors.gold)),
+                child: CircularProgressIndicator(color: AppColors.accent)),
             error: (e, _) => Center(
                 child: Text('Error: $e',
                     style: const TextStyle(color: AppColors.danger))),
@@ -202,24 +202,24 @@ class _NudgeBanner extends StatelessWidget {
       margin: const EdgeInsets.fromLTRB(16, 0, 16, 4),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: AppColors.goldMuted,
+        color: AppColors.accentMuted,
         borderRadius: const BorderRadius.vertical(bottom: Radius.circular(10)),
-        border: Border.all(color: AppColors.gold.withValues(alpha: 0.3)),
+        border: Border.all(color: AppColors.accent.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
-          const Icon(Icons.info_outline, color: AppColors.gold, size: 16),
+          const Icon(Icons.info_outline, color: AppColors.accent, size: 16),
           const SizedBox(width: 8),
           const Expanded(
             child: Text('This event is coming up soon!',
-                style: TextStyle(color: AppColors.gold, fontSize: 12)),
+                style: TextStyle(color: AppColors.accent, fontSize: 12)),
           ),
           GestureDetector(
             onTap: onConfirm,
             child: const Text(
               'Confirm going →',
               style: TextStyle(
-                  color: AppColors.gold,
+                  color: AppColors.accent,
                   fontSize: 12,
                   fontWeight: FontWeight.w600),
             ),

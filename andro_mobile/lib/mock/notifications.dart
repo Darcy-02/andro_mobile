@@ -1,0 +1,58 @@
+import '../models/notification_model.dart';
+
+final List<AppNotification> mockNotifications = [
+  AppNotification(
+    id: 'n1',
+    type: NotificationType.eventReminder,
+    title: 'ALU Innovation Week Kickoff is tomorrow',
+    body: 'You are going. The event starts at the Amphitheatre at 10:00am.',
+    targetRoute: '/event/e1',
+    isRead: false,
+    createdAt: DateTime.now().subtract(const Duration(hours: 1)),
+  ),
+  AppNotification(
+    id: 'n2',
+    type: NotificationType.connectionRequest,
+    title: 'Kwame Asante wants to connect',
+    body: 'BSc Software Engineering · Class of 2026',
+    targetRoute: '/profile/u3',
+    isRead: false,
+    createdAt: DateTime.now().subtract(const Duration(hours: 3)),
+  ),
+  AppNotification(
+    id: 'n3',
+    type: NotificationType.communityInvite,
+    title: 'You were added to Campus Leaders Circle',
+    body: 'Chidi Okafor added you to this private group.',
+    targetRoute: '/community/c6',
+    isRead: false,
+    createdAt: DateTime.now().subtract(const Duration(hours: 6)),
+  ),
+  AppNotification(
+    id: 'n4',
+    type: NotificationType.rsvpConfirmed,
+    title: 'RSVP confirmed: Startup Pitch Night',
+    body: 'You are going. See you at the Innovation Lab in 5 days.',
+    targetRoute: '/event/e2',
+    isRead: true,
+    createdAt: DateTime.now().subtract(const Duration(days: 1)),
+  ),
+  AppNotification(
+    id: 'n5',
+    type: NotificationType.mention,
+    title: 'Zara Mensah mentioned you',
+    body: '"@Ayo can you share the AgriConnect deck before Thursday?"',
+    targetRoute: '/chats/ch1',
+    isRead: true,
+    createdAt: DateTime.now().subtract(const Duration(days: 1, hours: 4)),
+  ),
+  AppNotification(
+    id: 'n6',
+    type: NotificationType.announcement,
+    title: 'Career Fair registration closes Friday',
+    body: 'Sign up on the student portal before the deadline.',
+    targetRoute: '/explore',
+    isRead: true,
+    createdAt: DateTime.now().subtract(const Duration(days: 2)),
+  ),
+];

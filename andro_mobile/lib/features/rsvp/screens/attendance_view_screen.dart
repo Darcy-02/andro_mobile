@@ -27,9 +27,9 @@ class AttendanceViewScreen extends ConsumerWidget {
     }
 
     final attendees = mockUsers
-        .where((u) => event.attendeeIds.contains(u.id))
+        .where((u) => event.goingIds.contains(u.id))
         .toList();
-    final goingCount = event.attendeeIds.length;
+    final goingCount = event.goingIds.length;
     final capacity = event.capacity;
 
     return Scaffold(

@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'core/theme/app_colors.dart';
-import 'features/profile/screens/profile_screen.dart';
-import 'features/profile/screens/edit_profile_screen.dart';
-import 'features/profile/screens/connections_screen.dart';
-import 'features/profile/screens/settings_screen.dart';
-import 'features/rsvp/screens/my_rsvps_screen.dart';
-import 'features/rsvp/screens/attendance_view_screen.dart';
-import 'features/startups/screens/startup_showcase_screen.dart';
-import 'features/startups/screens/startup_detail_screen.dart';
-import 'features/startups/screens/submit_startup_screen.dart';
+import 'features/auth/providers/auth_provider.dart';
 
 // Dev-only — remove when Darcy's router is ready
-class DevMenu extends StatelessWidget {
+class DevMenu extends ConsumerWidget {
   const DevMenu({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: AppColors.bgPrimary,
       appBar: AppBar(
@@ -39,32 +33,59 @@ class DevMenu extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          _section('Profile & Identity'),
-          _tile(context, 'Profile Screen (own)', Icons.person_outline,
-              () => const ProfileScreen(userId: 'u1')),
-          _tile(context, 'Profile Screen (other user)', Icons.person_outline,
-              () => const ProfileScreen(userId: 'u3')),
-          _tile(context, 'Edit Profile', Icons.edit_outlined,
-              () => const EditProfileScreen()),
-          _tile(context, 'Connections', Icons.people_outline,
-              () => const ConnectionsScreen(userId: 'u1')),
-          _tile(context, 'Settings', Icons.settings_outlined,
-              () => const SettingsScreen()),
+          _section('Auth'),
+          _tile(context, 'Login', Icons.login_outlined,
+              () => context.push('/login')),
+          _tile(context, 'Onboarding', Icons.waving_hand_outlined,
+              () => context.push('/onboarding')),
+          _tile(context, 'Enter App (skip auth)', Icons.skip_next_outlined, () {
+            ref.read(authProvider.notifier).completeOnboarding();
+          }),
           const SizedBox(height: 8),
-          _section('RSVPs & Events'),
+          _section('Main Screens'),
+          _tile(context, 'Feed', Icons.home_outlined,
+              () => context.push('/feed')),
+          _tile(context, 'Explore', Icons.explore_outlined,
+              () => context.push('/explore')),
+          _tile(context, 'Chats', Icons.chat_bubble_outline,
+              () => context.push('/chats')),
+          _tile(context, 'Notifications', Icons.notifications_outlined,
+              () => context.push('/notifications')),
+          const SizedBox(height: 8),
+          _section('Profile & Identity'),
+          _tile(context, 'Profile (own)', Icons.person_outline,
+              () => context.push('/profile/u1')),
+          _tile(context, 'Profile (other user)', Icons.person_outline,
+              () => context.push('/profile/u3')),
+          _tile(context, 'Edit Profile', Icons.edit_outlined,
+              () => context.push('/profile/edit')),
+          _tile(context, 'Connections', Icons.people_outline,
+              () => context.push('/profile/u1/connections')),
+          _tile(context, 'Settings', Icons.settings_outlined,
+              () => context.push('/settings')),
+          const SizedBox(height: 8),
+          _section('Events & RSVPs'),
+          _tile(context, 'Event Detail (Innovation Week)', Icons.event_outlined,
+              () => context.push('/event/e1')),
           _tile(context, 'My RSVPs', Icons.event_available_outlined,
-              () => const MyRsvpsScreen()),
+              () => context.push('/rsvps')),
           _tile(context, 'Attendance View (organiser)', Icons.bar_chart_outlined,
               // e2 is owned by u1
-              () => const AttendanceViewScreen(eventId: 'e2')),
+              () => context.push('/event/e2/attendance')),
+          const SizedBox(height: 8),
+          _section('Communities'),
+          _tile(context, 'Communities', Icons.groups_outlined,
+              () => context.push('/communities')),
+          _tile(context, 'Community Detail (Tech Hub)', Icons.info_outline,
+              () => context.push('/community/c2')),
           const SizedBox(height: 8),
           _section('Startups'),
           _tile(context, 'Startup Showcase', Icons.rocket_launch_outlined,
-              () => const StartupShowcaseScreen()),
-          _tile(context, 'Submit Startup', Icons.add_business_outlined,
-              () => const SubmitStartupScreen()),
+              () => context.push('/startups')),
           _tile(context, 'Startup Detail (AgriConnect)', Icons.info_outline,
-              () => const StartupDetailScreen(startupId: 's1')),
+              () => context.push('/startups/s1')),
+          _tile(context, 'Submit Startup', Icons.add_business_outlined,
+              () => context.push('/startups/submit')),
           const SizedBox(height: 32),
           Container(
             padding: const EdgeInsets.all(12),
@@ -104,7 +125,7 @@ class DevMenu extends StatelessWidget {
     BuildContext context,
     String label,
     IconData icon,
-    Widget Function() builder,
+    VoidCallback onTap,
   ) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
@@ -124,10 +145,7 @@ class DevMenu extends StatelessWidget {
         ),
         trailing: const Icon(Icons.arrow_forward_ios,
             color: AppColors.textSecondary, size: 14),
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => builder()),
-        ),
+        onTap: onTap,
       ),
     );
   }

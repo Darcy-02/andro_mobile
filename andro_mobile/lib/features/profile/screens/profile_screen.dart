@@ -242,7 +242,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
 
   void _showEventsSheet(BuildContext context, UserModel user) {
     final attended = mockEvents
-        .where((e) => e.attendeeIds.contains(user.id))
+        .where((e) => e.goingIds.contains(user.id))
         .toList();
     _showListSheet(
       context,

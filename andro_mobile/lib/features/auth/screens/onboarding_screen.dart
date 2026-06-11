@@ -30,15 +30,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
   // Step 3 fields
   UserRole _role = UserRole.student;
 
-  static const _programmes = [
-    'BSc Software Engineering',
-    'BSc Entrepreneurship',
-    'BSc International Business',
-    'BA Leadership and Entrepreneurship',
-    'BSc Data Science',
-  ];
-
-  static const _years = [2024, 2025, 2026, 2027, 2028];
+  static const _years = [2026, 2027, 2028, 2029, 2030];
 
   static const _tagIcons = <String, IconData>{
     'Entrepreneurship': Icons.rocket_launch_outlined,
@@ -53,7 +45,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
 
   static const _stepMeta = [
     (icon: Icons.person_outline, label: 'Profile'),
-    (icon: Icons.location_on_outlined, label: 'Campus'),
     (icon: Icons.interests_outlined, label: 'Interests'),
     (icon: Icons.badge_outlined, label: 'Role'),
   ];
@@ -66,7 +57,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
   }
 
   void _next() {
-    if (_step < 3) {
+    if (_step < 2) {
       setState(() {
         _forward = true;
         _step++;
@@ -93,7 +84,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
 
   bool get _canProceed {
     if (_step == 0) return _nameCtrl.text.trim().isNotEmpty;
-    if (_step == 2) return _selectedTags.isNotEmpty;
+    if (_step == 1) return _selectedTags.isNotEmpty;
     return true;
   }
 
@@ -165,7 +156,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
           const Spacer(),
           // Dot step indicators
           Row(
-            children: List.generate(4, (i) {
+            children: List.generate(3, (i) {
               final active = i == _step;
               final done = i < _step;
               return AnimatedContainer(
@@ -190,7 +181,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
           SizedBox(
             width: 36,
             child: Text(
-              '${_step + 1}/4',
+              '${_step + 1}/3',
               style: const TextStyle(
                   color: AppColors.textSecondary,
                   fontSize: 12,
@@ -230,7 +221,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                 ),
                 child: Center(
                   child: Text(
-                    _step == 3 ? 'Get Started →' : 'Continue →',
+                    _step == 2 ? 'Get Started →' : 'Continue →',
                     style: TextStyle(
                       color: _canProceed
                           ? AppColors.bgPrimary
@@ -255,10 +246,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
         return _step0();
       case 1:
         return _step1();
-      case 2:
-        return _step2();
       default:
-        return _step3();
+        return _step2();
     }
   }
 
@@ -294,7 +283,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
         _fieldLabel('Programme'),
         _dropdown(
           value: _programme,
-          items: _programmes,
+          items: aluProgrammes,
           onChanged: (v) => setState(() => _programme = v!),
         ),
         const SizedBox(height: 16),
@@ -309,7 +298,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     );
   }
 
-  // ── Step 1: Campus ───────────────────────────────────────────────
+  // ── Step 1: Interests ────────────────────────────────────────────
 
   Widget _step1() {
     return Padding(
@@ -318,113 +307,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _stepIconHeader(_stepMeta[1].icon),
-          const SizedBox(height: 20),
-          const Text(
-            'Your campus',
-            style: TextStyle(
-              color: AppColors.textPrimary,
-              fontSize: 26,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 6),
-          const Text(
-            'ANDRO is exclusively for ALU Kigali students.',
-            style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
-          ),
-          const SizedBox(height: 32),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: AppColors.bgSurface,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                  color: AppColors.accent.withValues(alpha: 0.35), width: 1.5),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.accent.withValues(alpha: 0.06),
-                  blurRadius: 20,
-                  offset: const Offset(0, 6),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const Text('🇷🇼', style: TextStyle(fontSize: 28)),
-                    const SizedBox(width: 14),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 9, vertical: 3),
-                          decoration: BoxDecoration(
-                            color: AppColors.accentMuted,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: const Text(
-                            'YOUR CAMPUS',
-                            style: TextStyle(
-                              color: AppColors.accent,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 1,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        const Text(
-                          'ALU Kigali',
-                          style: TextStyle(
-                            color: AppColors.textPrimary,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                const Divider(color: AppColors.border, height: 1),
-                const SizedBox(height: 16),
-                _campusDetail(Icons.location_on_outlined, 'Kigali, Rwanda'),
-                const SizedBox(height: 10),
-                _campusDetail(
-                    Icons.groups_outlined, 'African Leadership University'),
-                const SizedBox(height: 10),
-                _campusDetail(Icons.verified_outlined, 'Verified institution'),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _campusDetail(IconData icon, String text) => Row(
-        children: [
-          Icon(icon, color: AppColors.accent, size: 16),
-          const SizedBox(width: 10),
-          Text(text,
-              style: const TextStyle(
-                  color: AppColors.textSecondary, fontSize: 13)),
-        ],
-      );
-
-  // ── Step 2: Interests ────────────────────────────────────────────
-
-  Widget _step2() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 28, 24, 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _stepIconHeader(_stepMeta[2].icon),
           const SizedBox(height: 20),
           const Text(
             'Your interests',
@@ -511,15 +393,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     );
   }
 
-  // ── Step 3: Role ─────────────────────────────────────────────────
+  // ── Step 2: Role ─────────────────────────────────────────────────
 
-  Widget _step3() {
+  Widget _step2() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 28, 24, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _stepIconHeader(_stepMeta[3].icon),
+          _stepIconHeader(_stepMeta[2].icon),
           const SizedBox(height: 20),
           const Text(
             'Your role',

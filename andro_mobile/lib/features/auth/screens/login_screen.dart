@@ -1,18 +1,8 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import '../../../core/theme/app_colors.dart';
 import '../providers/auth_provider.dart';
-
-const _webClientId =
-    '59915597628-d28n2u48qt05gbtkbaoq8fhvqh3e3ksg.apps.googleusercontent.com';
-
-final _googleSignIn = GoogleSignIn(
-  clientId: _webClientId,
-  hostedDomain: 'alustudent.com',
-  scopes: ['email', 'profile'],
-);
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -24,7 +14,6 @@ class LoginScreen extends ConsumerStatefulWidget {
 class _LoginScreenState extends ConsumerState<LoginScreen>
     with SingleTickerProviderStateMixin {
   bool _loading = false;
-  String _error = '';
   late final AnimationController _fadeCtrl;
   late final Animation<double> _fade;
 
@@ -46,31 +35,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   }
 
   Future<void> _signInWithGoogle() async {
-    setState(() {
-      _loading = true;
-      _error = '';
-    });
-    try {
-      final account = await _googleSignIn.signIn();
-      if (account == null) {
-        setState(() => _loading = false);
-        return;
-      }
-      if (!account.email.endsWith('@alustudent.com')) {
-        await _googleSignIn.signOut();
-        setState(() {
-          _loading = false;
-          _error = 'Only @alustudent.com accounts are allowed.';
-        });
-        return;
-      }
-      ref.read(authProvider.notifier).login();
-    } catch (e) {
-      setState(() {
-        _loading = false;
-        _error = 'Sign-in failed. Use your ALU Gmail account.';
-      });
-    }
+    setState(() => _loading = true);
+    // Mocked sign-in: no backend, any tap logs in as the default mock user.
+    await Future.delayed(const Duration(milliseconds: 600));
+    if (!mounted) return;
+    ref.read(authProvider.notifier).login();
   }
 
   @override
@@ -244,11 +213,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                             ),
                           ),
                           const SizedBox(height: 32),
-
-                          if (_error.isNotEmpty) ...[
-                            _ErrorBanner(message: _error),
-                            const SizedBox(height: 16),
-                          ],
 
                           _SignInButton(
                             loading: _loading,
@@ -520,38 +484,6 @@ class _SignInButton extends StatelessWidget {
                   ],
                 ),
         ),
-      ),
-    );
-  }
-}
-
-// ── Error banner ──────────────────────────────────────────────────────────────
-
-class _ErrorBanner extends StatelessWidget {
-  final String message;
-  const _ErrorBanner({required this.message});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
-      decoration: BoxDecoration(
-        color: AppColors.danger.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: AppColors.danger.withValues(alpha: 0.35)),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Icon(Icons.error_outline, color: AppColors.danger, size: 16),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              message,
-              style: const TextStyle(color: AppColors.danger, fontSize: 13),
-            ),
-          ),
-        ],
       ),
     );
   }

@@ -250,7 +250,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       dropdownColor: AppColors.bgElevated,
       style: const TextStyle(color: AppColors.textPrimary),
       decoration: _inputDecoration('Select year'),
-      items: [2024, 2025, 2026, 2027, 2028]
+      items: [2026, 2027, 2028, 2029, 2030]
           .map((y) => DropdownMenuItem(value: y, child: Text('$y')))
           .toList(),
       onChanged: (v) => setState(() => _gradYear = v!),

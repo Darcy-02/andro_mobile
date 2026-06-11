@@ -1,9 +1,21 @@
+import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'ui/landing_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'ui/theme_colors.dart';
+import 'dev_menu.dart';
 
-void main() {
-  runApp(const AndroApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // FFI needed for sqflite on desktop
+  if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  }
+
+  runApp(const ProviderScope(child: AndroApp()));
 }
 
 class AndroApp extends StatefulWidget {
@@ -14,22 +26,12 @@ class AndroApp extends StatefulWidget {
 }
 
 class _AndroAppState extends State<AndroApp> {
-  ThemeMode _themeMode = ThemeMode.dark;
-
-  void _toggleTheme() {
-    setState(() {
-      _themeMode = _themeMode == ThemeMode.dark
-          ? ThemeMode.light
-          : ThemeMode.dark;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Andro',
-      themeMode: _themeMode,
+      themeMode: ThemeMode.dark,
       theme: ThemeData(
         brightness: Brightness.light,
         scaffoldBackgroundColor: AndroColors.lightBackground,
@@ -46,7 +48,8 @@ class _AndroAppState extends State<AndroApp> {
           surface: AndroColors.darkSurface,
         ),
       ),
-      home: LandingPage(onToggleTheme: _toggleTheme, themeMode: _themeMode),
+      // TODO: swap DevMenu for LandingPage when Darcy's router is ready
+      home: const DevMenu(),
     );
   }
 }

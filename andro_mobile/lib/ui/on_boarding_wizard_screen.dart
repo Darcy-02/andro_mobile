@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 
 class InterestItem {
   final String label;
-  final String emoji;
   bool selected;
 
   InterestItem({
     required this.label,
-    required this.emoji,
     this.selected = false,
   });
 }
@@ -24,14 +22,14 @@ class _OnboardingWizardScreenState extends State<OnboardingWizardScreen> {
   static const int _currentStep = 3;
 
   final List<InterestItem> _interests = [
-    InterestItem(label: 'Technology', emoji: '💻'),
-    InterestItem(label: 'Entrepreneurship', emoji: '🚀'),
-    InterestItem(label: 'Arts & Culture', emoji: '🎨'),
-    InterestItem(label: 'Leadership', emoji: '🌐'),
-    InterestItem(label: 'Sports', emoji: '🎯'),
-    InterestItem(label: 'Community Service', emoji: '💛'),
-    InterestItem(label: 'Academic Research', emoji: '🔬'),
-    InterestItem(label: 'Career & Internships', emoji: '💼'),
+    InterestItem(label: 'Technology'),
+    InterestItem(label: 'Entrepreneurship'),
+    InterestItem(label: 'Arts & Culture'),
+    InterestItem(label: 'Leadership'),
+    InterestItem(label: 'Sports'),
+    InterestItem(label: 'Community Service'),
+    InterestItem(label: 'Academic Research'),
+    InterestItem(label: 'Career & Internships'),
   ];
 
   int get _selectedCount => _interests.where((i) => i.selected).length;
@@ -76,7 +74,7 @@ class _OnboardingWizardScreenState extends State<OnboardingWizardScreen> {
                     ],
                   ),
                   child: const Center(
-                    child: Text('🎯', style: TextStyle(fontSize: 36)),
+                    child: Icon(Icons.interests_rounded, color: Colors.white, size: 36),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -143,11 +141,6 @@ class _OnboardingWizardScreenState extends State<OnboardingWizardScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
-                                item.emoji,
-                                style: const TextStyle(fontSize: 20),
-                              ),
-                              const SizedBox(width: 8),
                               Flexible(
                                 child: Text(
                                   item.label,

@@ -309,7 +309,7 @@ class _OpportunityDetailPageState extends State<OpportunityDetailPage> {
                       SnackBar(
                         content: Text(
                           _applied
-                              ? 'Application submitted! Good luck 🎉'
+                              ? 'Application submitted!'
                               : 'Application withdrawn.',
                         ),
                         backgroundColor: accent,

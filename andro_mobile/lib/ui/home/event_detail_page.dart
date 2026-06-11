@@ -376,7 +376,7 @@ class _EventDetailPageState extends State<EventDetailPage> {
                       SnackBar(
                         content: Text(
                           _rsvped
-                              ? 'RSVP confirmed! See you there 🎉'
+                              ? 'RSVP confirmed! See you there.'
                               : 'RSVP cancelled.',
                         ),
                         backgroundColor: accent,

@@ -140,7 +140,7 @@ class _HomeFeedPageState extends State<HomeFeedPage> {
                             text: firstName,
                             style: TextStyle(color: amber),
                           ),
-                          const TextSpan(text: ' 👋'),
+                          const TextSpan(text: ''),
                         ],
                       ),
                     ),

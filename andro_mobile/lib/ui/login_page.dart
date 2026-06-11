@@ -1,18 +1,10 @@
 import 'package:flutter/material.dart';
 import 'theme_colors.dart';
-import 'register_page.dart';
-import 'user_store.dart';
+import 'register_screen.dart';
 import 'shell/main_shell.dart';
 
 class LoginPage extends StatefulWidget {
-  final VoidCallback onToggleTheme;
-  final ThemeMode themeMode;
-
-  const LoginPage({
-    super.key,
-    required this.onToggleTheme,
-    required this.themeMode,
-  });
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -25,7 +17,7 @@ class _LoginPageState extends State<LoginPage> {
   bool _showPassword = false;
   String _errorMessage = '';
 
-  bool get _isDark => widget.themeMode == ThemeMode.dark;
+  bool get _isDark => Theme.of(context).brightness == Brightness.dark;
 
   @override
   void dispose() {
@@ -43,24 +35,11 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    final user = UserStore.findUser(email: email, password: password);
-
-    if (user == null) {
-      setState(() => _errorMessage = 'Incorrect email or password.');
-      return;
-    }
-
     setState(() => _errorMessage = '');
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(
-        builder: (_) => MainShell(
-          currentUser: user,
-          themeMode: widget.themeMode,
-          onToggleTheme: widget.onToggleTheme,
-        ),
-      ),
-      (route) => false,
+      MaterialPageRoute(builder: (_) => const MainShell()),
+      (_) => false,
     );
   }
 
@@ -88,26 +67,7 @@ class _LoginPageState extends State<LoginPage> {
           'Welcome back',
           style: TextStyle(color: text, fontWeight: FontWeight.bold),
         ),
-        actions: [
-          GestureDetector(
-            onTap: widget.onToggleTheme,
-            child: Container(
-              margin: const EdgeInsets.only(right: 16),
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
-                color: surface,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: sub.withOpacity(0.3)),
-              ),
-              child: Icon(
-                _isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
-                color: sub,
-                size: 18,
-              ),
-            ),
-          ),
-        ],
+        actions: const [],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -223,10 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => RegisterPage(
-                            onToggleTheme: widget.onToggleTheme,
-                            themeMode: widget.themeMode,
-                          ),
+                          builder: (_) => const RegisterScreen(),
                         ),
                       );
                     },
